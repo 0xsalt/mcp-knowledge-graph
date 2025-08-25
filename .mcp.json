@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "memory": {
+      "command": "node",
+      "args": ["dist/index.js", "--memory-path", "/home/wks/.claude/memory.jsonl"],
+      "env": {}
+    }
+  }
+}

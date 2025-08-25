@@ -108,18 +108,36 @@ mkdir -p /your/custom/directory
         "/home/username/.claude/memory.jsonl"
       ],
       "autoapprove": [
-        "create_entities",
-        "create_relations",
-        "add_observations", 
-        "delete_entities",
-        "delete_observations",
-        "delete_relations",
-        "read_graph",
-        "search_nodes",
-        "open_nodes"
+        "mcp__memory__create_entities",
+        "mcp__memory__create_relations",
+        "mcp__memory__add_observations", 
+        "mcp__memory__delete_entities",
+        "mcp__memory__delete_observations",
+        "mcp__memory__delete_relations",
+        "mcp__memory__read_graph",
+        "mcp__memory__search_nodes",
+        "mcp__memory__open_nodes"
       ]
     }
   }
+}
+```
+
+**Alternative: Use allowedTools in settings.local.json (for Claude CLI)**
+If using Claude CLI, you can skip tool approval prompts by adding this to `~/.claude/settings.local.json`:
+```json
+{
+  "allowedTools": [
+    "mcp__memory__read_graph:*",
+    "mcp__memory__search_nodes:*",
+    "mcp__memory__open_nodes:*",
+    "mcp__memory__create_entities:*",
+    "mcp__memory__create_relations:*",
+    "mcp__memory__add_observations:*",
+    "mcp__memory__delete_entities:*",
+    "mcp__memory__delete_observations:*",
+    "mcp__memory__delete_relations:*"
+  ]
 }
 ```
 
@@ -135,15 +153,15 @@ mkdir -p /your/custom/directory
         "/home/username/.claude/memory.jsonl"
       ],
       "autoapprove": [
-        "create_entities",
-        "create_relations", 
-        "add_observations",
-        "delete_entities",
-        "delete_observations",
-        "delete_relations",
-        "read_graph",
-        "search_nodes",
-        "open_nodes"
+        "mcp__memory__create_entities",
+        "mcp__memory__create_relations", 
+        "mcp__memory__add_observations",
+        "mcp__memory__delete_entities",
+        "mcp__memory__delete_observations",
+        "mcp__memory__delete_relations",
+        "mcp__memory__read_graph",
+        "mcp__memory__search_nodes",
+        "mcp__memory__open_nodes"
       ]
     }
   }
@@ -157,27 +175,59 @@ mkdir -p /your/custom/directory
 
 **Important:** Replace `/full/path/to/mcp-knowledge-graph` with the actual path where you cloned the repository.
 
-#### Option B: Claude CLI (Recommended)
+#### Option B: Claude CLI
 
-**Claude CLI uses a different configuration system than Claude Desktop.** Follow these steps:
+**Claude CLI uses a different configuration system than Claude Desktop.** Currently, you need to configure manually using project-local `.mcp.json` files and `settings.local.json`. The `claude mcp add-json` command will be added in the next Claude CLI release.
 
-1. **Add the MCP server with auto-approval:**
-```bash
-# If you used npm link
-claude mcp add-json memory '{"command": "mcp-knowledge-graph", "args": ["--memory-path", "/home/username/.claude/memory.jsonl"], "autoapprove": ["create_entities", "create_relations", "add_observations", "delete_entities", "delete_observations", "delete_relations", "read_graph", "search_nodes", "open_nodes"]}' -s local
+**Current Method (Manual Configuration):**
 
-# If you didn't use npm link (replace with your actual path)
-claude mcp add-json memory '{"command": "node", "args": ["/full/path/to/mcp-knowledge-graph/dist/index.js", "--memory-path", "/home/username/.claude/memory.jsonl"], "autoapprove": ["create_entities", "create_relations", "add_observations", "delete_entities", "delete_observations", "delete_relations", "read_graph", "search_nodes", "open_nodes"]}' -s local
+1. **Create or edit `.mcp.json` in your project directory:**
+```json
+{
+  "mcpServers": {
+    "memory": {
+      "command": "node",
+      "args": ["dist/index.js", "--memory-path", "/home/username/.claude/memory.jsonl"],
+      "env": {}
+    }
+  }
+}
 ```
 
-2. **Verify the configuration:**
+2. **Create or edit `~/.claude/settings.local.json` to skip approval prompts:**
+```json
+{
+  "allowedTools": [
+    "mcp__memory__read_graph:*",
+    "mcp__memory__search_nodes:*",
+    "mcp__memory__open_nodes:*",
+    "mcp__memory__create_entities:*",
+    "mcp__memory__create_relations:*",
+    "mcp__memory__add_observations:*",
+    "mcp__memory__delete_entities:*",
+    "mcp__memory__delete_observations:*",
+    "mcp__memory__delete_relations:*"
+  ]
+}
+```
+
+**Future Method (Next Release):**
+```bash
+# If you used npm link (use -s user for global access from any directory)
+claude mcp add-json memory '{"command": "mcp-knowledge-graph", "args": ["--memory-path", "/home/username/.claude/memory.jsonl"], "autoapprove": ["mcp__memory__create_entities", "mcp__memory__create_relations", "mcp__memory__add_observations", "mcp__memory__delete_entities", "mcp__memory__delete_observations", "mcp__memory__delete_relations", "mcp__memory__read_graph", "mcp__memory__search_nodes", "mcp__memory__open_nodes"]}' -s user
+
+# If you didn't use npm link (replace with your actual path)
+claude mcp add-json memory '{"command": "node", "args": ["/full/path/to/mcp-knowledge-graph/dist/index.js", "--memory-path", "/home/username/.claude/memory.jsonl"], "autoapprove": ["mcp__memory__create_entities", "mcp__memory__create_relations", "mcp__memory__add_observations", "mcp__memory__delete_entities", "mcp__memory__delete_observations", "mcp__memory__delete_relations", "mcp__memory__read_graph", "mcp__memory__search_nodes", "mcp__memory__open_nodes"]}' -s user
+```
+
+3. **Verify the configuration:**
 ```bash
 claude mcp list
 ```
 
 **Expected output:**
 ```
-memory: mcp-knowledge-graph --memory-path /home/username/.claude/memory.jsonl - ✓ Connected
+memory: node dist/index.js --memory-path /home/username/.claude/memory.jsonl - ✓ Connected
 ```
 
 **Examples for different memory locations:**
@@ -185,13 +235,14 @@ memory: mcp-knowledge-graph --memory-path /home/username/.claude/memory.jsonl - 
 - System-wide: `"--memory-path", "/home/username/.claude/memory.jsonl"`
 - Custom: `"--memory-path", "/your/custom/path/memory.jsonl"`
 
-**Important:** 
+**Important Configuration Notes:** 
 - Replace `/home/username/.claude/memory.jsonl` with your chosen memory path
 - Replace `/full/path/to/mcp-knowledge-graph` with the actual path where you cloned the repository
-- The `autoapprove` array ensures all memory operations are automatically approved without prompting
-- The `-s local` flag ensures the configuration is stored in the project-specific section of the global `~/.claude.json` file
+- The `allowedTools` array in `settings.local.json` ensures all memory operations are automatically approved without prompting
+- Tools are prefixed with `mcp__memory__` (e.g., `mcp__memory__create_entities`) - this is the actual tool namespace
+- The `-s user` flag (in future releases) ensures the configuration is available from any directory globally, making the MCP server accessible across all projects. This stores configuration in the global `~/.claude.json` file in your home directory.
 
-**Note:** Claude CLI stores project-specific configurations in the global `~/.claude.json` file in your home directory. This is the correct behavior - each project gets its own section in this file.
+**Why `-s user` scope?** This makes the memory system available from any directory, which enables persistent memory that should work across all your projects and conversations.
 
 
 #### Option C: Other AI Platforms
@@ -268,15 +319,15 @@ claude
 "What do you remember about me?"
 ```
 
-**Expected Response:**
-The AI should respond with "Remembering..." and access your memory without asking for permission.
+**Expected Response On First Use:**
+The AI should respond with "Remembering..." and begin building your TELOS-structured memory graph.
 
 #### Step 3: Test with Claude Desktop
 1. Restart Claude Desktop
 2. Start a new conversation  
 3. Ask: "What do you remember about me?"
 
-**Expected Response:**
+**Expected Response On First Use:**
 The AI should respond with "Remembering..." and begin building your TELOS-structured memory graph.
 
 #### Troubleshooting
@@ -287,7 +338,8 @@ The AI should respond with "Remembering..." and begin building your TELOS-struct
 - Ensure you have Node.js 18+ installed
 
 **If Claude CLI shows "No MCP servers configured":**
-- Run the `claude mcp add-json` command again
+- **CRITICAL**: Run the `claude mcp add-json` command from step 1 before testing
+- Verify with `claude mcp list` that the server shows as "✓ Connected"
 - Check that the JSON syntax is correct
 - Verify the command and args are valid
 
@@ -558,15 +610,15 @@ Add this to your claude_desktop_config.json:
         "/home/username/.claude/memory.jsonl"
       ],
       "autoapprove": [
-        "create_entities",
-        "create_relations",
-        "add_observations",
-        "delete_entities",
-        "delete_observations",
-        "delete_relations",
-        "read_graph",
-        "search_nodes",
-        "open_nodes"
+        "mcp__memory__create_entities",
+        "mcp__memory__create_relations",
+        "mcp__memory__add_observations",
+        "mcp__memory__delete_entities",
+        "mcp__memory__delete_observations",
+        "mcp__memory__delete_relations",
+        "mcp__memory__read_graph",
+        "mcp__memory__search_nodes",
+        "mcp__memory__open_nodes"
       ]
     },
   }
@@ -593,15 +645,15 @@ You can specify a custom path for the memory file:
         "/home/username/.claude/memory.jsonl"
       ],
       "autoapprove": [
-        "create_entities",
-        "create_relations",
-        "add_observations",
-        "delete_entities",
-        "delete_observations",
-        "delete_relations",
-        "read_graph",
-        "search_nodes",
-        "open_nodes"
+        "mcp__memory__create_entities",
+        "mcp__memory__create_relations",
+        "mcp__memory__add_observations",
+        "mcp__memory__delete_entities",
+        "mcp__memory__delete_observations",
+        "mcp__memory__delete_relations",
+        "mcp__memory__read_graph",
+        "mcp__memory__search_nodes",
+        "mcp__memory__open_nodes"
       ]
     },
   }
@@ -621,25 +673,20 @@ Follow these steps for each interaction:
 
 1. User Identification:
    - You should assume that you are interacting with default_user
-   - If you have not identified default_user, proactively try to do so.
 
 2. Memory Retrieval:
    - Always begin your chat by saying only "Remembering..." and retrieve all relevant information from your knowledge graph
    - Always refer to your knowledge graph as your "memory"
+   - If your memory is empty on first use, immediately create a default_user entity and start building their TELOS-structured knowledge graph
 
 3. Memory Gathering:
-   - While conversing with the user, be attentive to any new information that falls into these categories:
-     a) Basic Identity (age, gender, location, job title, education level, etc.)
-     b) Behaviors (interests, habits, etc.)
-     c) Preferences (communication style, preferred language, etc.)
-     d) Goals (goals, targets, aspirations, etc.)
-     e) Relationships (personal and professional relationships up to 3 degrees of separation)
+   - While conversing with the user, be attentive to any new information that falls into these categories described in mcp-knowledge-graph.mdc Section 3: Context, Conventions, Decisions, Habits, Identity, Memory, Objectives, Projects, Relationships, Resources, Retros, or Risks.
 
 4. Memory Update:
    - If any new information was gathered during the interaction, update your memory as follows:
-     a) Create entities for recurring organizations, people, and significant events
-     b) Connect them to the current entities using relations
-     c) Store facts about them as observations
+     a) Create entities for categories described in mcp-knowledge-graph.mdc Section 3
+     b) Connect them to the current entities using relation tags defined in mcp-knowledge-graph.mdc Section 3
+     c) Categories into the above categories and link where relevant
 ```
 
 ## Integration with Other AI Models
