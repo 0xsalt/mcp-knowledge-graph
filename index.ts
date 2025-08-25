@@ -16,6 +16,26 @@ import { isAbsolute } from 'path';
 const argv = minimist(process.argv.slice(2));
 let memoryPath = argv['memory-path'];
 
+// Show help if requested
+if (argv.help || argv.h) {
+  console.log(`
+MCP Knowledge Graph Server
+
+Usage: node dist/index.js [options]
+
+Options:
+  --memory-path <path>    Custom path for memory.jsonl file
+  --help, -h              Show this help message
+
+Examples:
+  node dist/index.js --memory-path ~/.claude/memory.jsonl
+  node dist/index.js --memory-path ./my-memory.jsonl
+
+Default memory location: ./memory.jsonl (relative to current working directory)
+`);
+  process.exit(0);
+}
+
 // If a custom path is provided, ensure it's absolute
 if (memoryPath && !isAbsolute(memoryPath)) {
     memoryPath = path.resolve(process.cwd(), memoryPath);
@@ -23,8 +43,8 @@ if (memoryPath && !isAbsolute(memoryPath)) {
 
 // Define the path to the JSONL file
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// Use the custom path or default to the installation directory
-const MEMORY_FILE_PATH = memoryPath || path.join(__dirname, 'memory.jsonl');
+// Use the custom path or default to the current working directory
+const MEMORY_FILE_PATH = memoryPath || path.join(process.cwd(), 'memory.jsonl');
 
 // We are storing our memory using entities, relations, and observations in a graph structure
 interface Entity {

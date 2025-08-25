@@ -2,6 +2,8 @@
 docs/agent-codebase-documentation/
 docs/code-documentation/
 docs/telos-mcp-template/
+docs/docs_map.md
+.env
 CLAUDE.md
 
 # Build output
