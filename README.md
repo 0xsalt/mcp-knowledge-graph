@@ -1,19 +1,14 @@
-# `mcp-knowledge-graph`
-
-> Knowledge Graph Memory Server
+# mcp-knowledge-graph
+> Local Knowledge Graph Memory Server for MCP
 
 An improved implementation of persistent memory using a local knowledge graph with a customizable `--memory-path`.
 
-This lets AI models remember information about the user across chats. It works with any AI model that supports the Model Context Protocol (MCP) or function calling capabilities.
+Works with any AI model or client that supports the Model Context Protocol (MCP) or function-calling interfaces. Use a stable path so memory survives restarts and npx cache wipes.
 
-> [!NOTE]
-> **Fork lineage**
-
-```mermaid
-flowchart LR
-  A[modelcontextprotocol/servers: memory] --> B[shaneholloman/mcp-knowledge-graph]
-  B --> C[this repository: mcp-knowledge-graph]
-```
+> [!NOTE] Fork lineage
+> - Original: [Memory Server](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)
+> - Fork: [shaneholloman/mcp-knowledge-graph](https://github.com/shaneholloman/mcp-knowledge-graph) — avoids the ephemeral **npx** install method
+> - This repo: maintains persistent, explicit storage via `--memory-path`
 
 ## 🚀 Quick Start
 
