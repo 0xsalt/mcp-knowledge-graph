@@ -5,6 +5,7 @@ docs/telos-mcp-template/
 docs/docs_map.md
 .env
 CLAUDE.md
+debug-log*
 
 # Build output
 dist/
