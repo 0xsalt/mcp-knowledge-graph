@@ -11,7 +11,7 @@ Works with any AI model or client that supports the Model Context Protocol (MCP)
 >   - avoids the ephemeral **npx** install method
 > - This repo: maintains persistent, explicit storage via `--memory-path`
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 0. Prerequisites
 
@@ -304,7 +304,7 @@ The AI should respond with "Remembering..." and begin building your TELOS-struct
 
 ---
 
-## 🗑️ Uninstall & Clean Wipe Instructions
+## Uninstall & Clean Wipe Instructions
 
 If you want to completely remove the MCP Knowledge Graph server and start fresh, follow these steps:
 
