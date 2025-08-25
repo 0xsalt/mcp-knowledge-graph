@@ -9,6 +9,103 @@ This lets AI models remember information about the user across chats. It works w
 > [!NOTE]
 > This is a fork of the original [Memory Server](https://github.com/modelcontextprotocol/servers/tree/main/src/memory) and is intended to not use the ephemeral memory npx installation method.
 
+## 🚀 Quick Start
+
+### 1. Clone & Install Persistently
+
+```bash
+# Clone the repository
+git clone https://github.com/shaneholloman/mcp-knowledge-graph.git
+cd mcp-knowledge-graph
+
+# Install dependencies and build
+npm install
+npm run build
+
+# Make globally available (optional)
+npm link
+```
+
+### 2. Set Up Your Persistent Memory Folder
+
+```bash
+# Create your persistent memory directory
+mkdir -p ~/ai-memory
+
+# The memory file will be created automatically as ~/ai-memory/memory.jsonl
+```
+
+### 3. Configure Claude Desktop
+
+Add this to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "memory": {
+      "command": "node",
+      "args": [
+        "/path/to/your/mcp-knowledge-graph/dist/index.js",
+        "--memory-path",
+        "/Users/yourusername/ai-memory/memory.jsonl"
+      ],
+      "autoapprove": [
+        "create_entities",
+        "create_relations", 
+        "add_observations",
+        "delete_entities",
+        "delete_observations",
+        "delete_relations",
+        "read_graph",
+        "search_nodes",
+        "open_nodes"
+      ]
+    }
+  }
+}
+```
+
+**Alternative: Using npm link (if you ran it above)**
+```json
+{
+  "mcpServers": {
+    "memory": {
+      "command": "mcp-knowledge-graph",
+      "args": [
+        "--memory-path",
+        "/Users/yourusername/ai-memory/memory.jsonl"
+      ],
+      "autoapprove": [
+        "create_entities",
+        "create_relations",
+        "add_observations", 
+        "delete_entities",
+        "delete_observations",
+        "delete_relations",
+        "read_graph",
+        "search_nodes",
+        "open_nodes"
+      ]
+    }
+  }
+}
+```
+
+### 4. Add Memory Instructions to Your AI
+
+For agentic coding partners, point them to: **[mcp-knowledge-graph.mdc](./mcp-knowledge-graph.mdc)**
+
+For Claude Projects, copy the system prompt from that file into your Custom Instructions.
+
+### 5. Restart & Test
+
+1. Restart Claude Desktop
+2. Start a new conversation  
+3. Ask: "What do you remember about me?"
+4. The AI should respond with "Remembering..." and begin building your memory graph
+
+---
+
 ## Server Name
 
 ```txt
