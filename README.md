@@ -6,8 +6,9 @@ An improved implementation of persistent memory using a local knowledge graph wi
 Works with any AI model or client that supports the Model Context Protocol (MCP) or function-calling interfaces. Use a stable path so memory survives restarts and npx cache wipes.
 
 > [!NOTE] 
-> - Original: [Memory Server](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)
-> - Fork: [shaneholloman/mcp-knowledge-graph](https://github.com/shaneholloman/mcp-knowledge-graph) — avoids the ephemeral **npx** install method
+> - Original: [Memory Server, Anthropic](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)
+> - Fork: [shaneholloman/mcp-knowledge-graph](https://github.com/shaneholloman/mcp-knowledge-graph)
+>   - avoids the ephemeral **npx** install method
 > - This repo: maintains persistent, explicit storage via `--memory-path`
 
 ## 🚀 Quick Start
