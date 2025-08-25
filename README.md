@@ -7,11 +7,13 @@ An improved implementation of persistent memory using a local knowledge graph wi
 This lets AI models remember information about the user across chats. It works with any AI model that supports the Model Context Protocol (MCP) or function calling capabilities.
 
 > [!NOTE]
-> This is a fork of:
-  [shaneholloman's](https://github.com/shaneholloman/mcp-knowledge-graph)  
-    - which is intended to not use the ephemeral memory npx installation method  
-    - which is a fork of the original  
-  [Memory Server](https://github.com/modelcontextprotocol/servers/tree/main/src/memory).  
+> **Fork lineage**
+
+```mermaid
+flowchart LR
+  A[modelcontextprotocol/servers: memory] --> B[shaneholloman/mcp-knowledge-graph]
+  B --> C[this repository: mcp-knowledge-graph]
+```
 
 ## 🚀 Quick Start
 
