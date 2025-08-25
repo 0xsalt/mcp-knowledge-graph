@@ -1,0 +1,2 @@
+# Decision Journal (rolling)
+- [YYYY-MM-DD] — Decision: [Brief description of what you decided]; Why: [Your reasoning and context for the decision]; Alts: [Alternative options you considered]; Expected: [What outcome you expect from this decision]; Review: [When and how you'll review this decision]
