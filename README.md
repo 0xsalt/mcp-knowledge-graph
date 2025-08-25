@@ -8,10 +8,10 @@ This lets AI models remember information about the user across chats. It works w
 
 > [!NOTE]
 > This is a fork of:
-  [shaneholloman's](https://github.com/shaneholloman/mcp-knowledge-graph) 
-    - which is intended to not use the ephemeral memory npx installation method
-    - which is a fork of the original 
-  [Memory Server](https://github.com/modelcontextprotocol/servers/tree/main/src/memory).
+  [shaneholloman's](https://github.com/shaneholloman/mcp-knowledge-graph)  
+    - which is intended to not use the ephemeral memory npx installation method  
+    - which is a fork of the original  
+  [Memory Server](https://github.com/modelcontextprotocol/servers/tree/main/src/memory).  
 
 ## 🚀 Quick Start
 
