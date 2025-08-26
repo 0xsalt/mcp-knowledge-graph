@@ -1,9 +1,19 @@
 # mcp-knowledge-graph
+![Status](https://img.shields.io/badge/status-work--in--progress-yellow)
 > Local Knowledge Graph Memory Server for MCP
 
 An improved implementation of persistent memory using a local knowledge graph with a customizable `--memory-path`.
 
 Works with any AI model or client that supports the Model Context Protocol (MCP) or function-calling interfaces. Use a stable path so memory survives restarts and npx cache wipes.
+
+### Project Status: Work in Progress
+
+This repository is a **public fork** and is currently under **active development**.  
+Features are being added, but **things may be broken** at the moment.
+
+You’re welcome to clone and experiment, but please note that setup may fail or behave unexpectedly until stabilization.  
+For the original, stable version, see: [upstream repository](https://github.com/shaneholloman/mcp-knowledge-graph).
+
 
 > [!NOTE] 
 > - Original: [Memory Server, Anthropic](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)
@@ -677,7 +687,7 @@ Follow these steps for each interaction:
 2. Memory Retrieval:
    - Always begin your chat by saying only "Remembering..." and retrieve all relevant information from your knowledge graph
    - Always refer to your knowledge graph as your "memory"
-   - If your memory is empty on first use, immediately create a default_user entity and start building their TELOS-structured knowledge graph
+   - If your memory is empty on first use, immediately create a default_user entity and init a single entry that today their TELOS-structured knowledge graph began. No other content at this time. 
 
 3. Memory Gathering:
    - While conversing with the user, be attentive to any new information that falls into these categories described in mcp-knowledge-graph.mdc Section 3: Context, Conventions, Decisions, Habits, Identity, Memory, Objectives, Projects, Relationships, Resources, Retros, or Risks.
