@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "memory": {
-      "command": "node",
-      "args": ["dist/index.js", "--memory-path", "/home/wks/local/_tmp90/scripts/scripts/mcp-knowledge-graph/memory.jsonl"],
-      "env": {}
-    }
-  }
-}
