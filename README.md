@@ -6,7 +6,8 @@ An improved implementation of persistent memory using a local knowledge graph wi
 
 Works with any AI model or client that supports the Model Context Protocol (MCP) or function-calling interfaces. Use a stable path so memory survives restarts and npx cache wipes.
 
-> [!### Project Status: Work in Progress]
+> [!NOTE]
+> ### Project Status: Work in Progress
 >
 >This repository is a **public fork** and is currently under **active development**.  
 >Features are being added, but **things may be broken** at the moment.
