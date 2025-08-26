@@ -10,11 +10,11 @@ Works with any AI model or client that supports the Model Context Protocol (MCP)
 > ### Project Status: Work in Progress
 >
 >This repository is a **public fork** and is currently under **active development**.  
->Features are being added, but **things may be broken** at the moment.
+>Features are being added, but **things may be broken** at the moment.  
 >
->You’re welcome to clone and experiment.
->Setup instructions are currently messy so walk through them carefully until I can clean them  up.
->For the original, stable version, see: [upstream repository](https://github.com/shaneholloman/mcp-knowledge-graph).
+>You’re welcome to clone and experiment.  
+>Setup instructions are currently messy so walk through them carefully until I can clean them  up.  
+>For the original, stable version, see: [upstream repository](https://github.com/shaneholloman/mcp-knowledge-graph).  
 
 
 > [!NOTE] 
