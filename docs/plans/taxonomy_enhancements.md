@@ -31,7 +31,7 @@ Identity, Memory, Resources, Context, Conventions, Objectives, Projects, Habits,
 **File**: `docs/relationship-taxonomy.md`
 **Requirements**:
 - Document all 7 relationship types with definitions and examples
-- Create 12x12 matrix showing valid TELOS category connections (From→To)
+- Create 7x12 matrix showing which relationship types are valid for each TELOS category
 - Include usage guidelines and best practices
 - Provide examples for each relationship type
 
@@ -42,8 +42,8 @@ Identity, Memory, Resources, Context, Conventions, Objectives, Projects, Habits,
 ## Relationship Types
 [7 relationships with definitions, examples, usage rules]
 
-## TELOS Category Matrix  
-[12x12 table showing valid From→To category connections]
+## Relationship-Category Matrix  
+[7x12 table showing which relationship types are valid for each TELOS category]
 
 ## Usage Guidelines
 - Default relationship selection rules
@@ -232,7 +232,7 @@ export function getSuggestedRelationships(from: TelosCategory, to: TelosCategory
 
 ### Potential Issues
 - **Performance**: Relationship validation on every creation
-- **Complexity**: 12x12 category matrix might be overwhelming
+- **Complexity**: 7x12 relationship matrix might be overwhelming
 - **Migration**: Existing relationships need taxonomy assignment
 
 ### Rollback Plan
@@ -264,4 +264,4 @@ export function getSuggestedRelationships(from: TelosCategory, to: TelosCategory
 - **Total**: 9-13 hours for complete implementation
 
 ## Next Action
-Begin with **Task 1.1**: Create `docs/relationship-taxonomy.md` with complete taxonomy documentation including the 12x7 relationship matrix.
+Begin with **Task 1.1**: Create `docs/relationship-taxonomy.md` with complete taxonomy documentation including the 7x12 relationship matrix.
