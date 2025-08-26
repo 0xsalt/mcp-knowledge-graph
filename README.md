@@ -134,23 +134,6 @@ mkdir -p /your/custom/directory
 }
 ```
 
-**Alternative: Use allowedTools in settings.local.json (for Claude CLI)**
-If using Claude CLI, you can skip tool approval prompts by adding this to `~/.claude/settings.local.json`:
-```json
-{
-  "allowedTools": [
-    "mcp__memory__read_graph:*",
-    "mcp__memory__search_nodes:*",
-    "mcp__memory__open_nodes:*",
-    "mcp__memory__create_entities:*",
-    "mcp__memory__create_relations:*",
-    "mcp__memory__add_observations:*",
-    "mcp__memory__delete_entities:*",
-    "mcp__memory__delete_observations:*",
-    "mcp__memory__delete_relations:*"
-  ]
-}
-```
 
 **If you didn't use `npm link` (full path approach):**
 ```json
@@ -188,47 +171,17 @@ If using Claude CLI, you can skip tool approval prompts by adding this to `~/.cl
 
 #### Option B: Claude CLI
 
-**Claude CLI uses a different configuration system than Claude Desktop.** Currently, you need to configure manually using project-local `.mcp.json` files and `settings.local.json`. The `claude mcp add-json` command will be added in the next Claude CLI release.
+Configure the MCP server using the `claude mcp add-json` command:
 
-**Current Method (Manual Configuration):**
-
-1. **Create or edit `.mcp.json` in your project directory:**
-```json
-{
-  "mcpServers": {
-    "memory": {
-      "command": "node",
-      "args": ["dist/index.js", "--memory-path", "/home/username/.claude/memory.jsonl"],
-      "env": {}
-    }
-  }
-}
-```
-
-2. **Create or edit `~/.claude/settings.local.json` to skip approval prompts:**
-```json
-{
-  "allowedTools": [
-    "mcp__memory__read_graph:*",
-    "mcp__memory__search_nodes:*",
-    "mcp__memory__open_nodes:*",
-    "mcp__memory__create_entities:*",
-    "mcp__memory__create_relations:*",
-    "mcp__memory__add_observations:*",
-    "mcp__memory__delete_entities:*",
-    "mcp__memory__delete_observations:*",
-    "mcp__memory__delete_relations:*"
-  ]
-}
-```
-
-**Future Method (Next Release):**
+**If you used `npm link` (global installation):**
 ```bash
-# If you used npm link (use -s user for global access from any directory)
-claude mcp add-json memory '{"command": "mcp-knowledge-graph", "args": ["--memory-path", "/home/username/.claude/memory.jsonl"], "autoapprove": ["mcp__memory__create_entities", "mcp__memory__create_relations", "mcp__memory__add_observations", "mcp__memory__delete_entities", "mcp__memory__delete_observations", "mcp__memory__delete_relations", "mcp__memory__read_graph", "mcp__memory__search_nodes", "mcp__memory__open_nodes"]}' -s user
+claude mcp add-json memory '{"command": "mcp-knowledge-graph", "args": ["--memory-path", "/home/username/.claude/memory.jsonl"], "autoapprove": ["create_entities", "create_relations", "add_observations", "delete_entities", "delete_observations", "delete_relations", "read_graph", "search_nodes", "open_nodes"]}' -s user
+```
 
-# If you didn't use npm link (replace with your actual path)
-claude mcp add-json memory '{"command": "node", "args": ["/full/path/to/mcp-knowledge-graph/dist/index.js", "--memory-path", "/home/username/.claude/memory.jsonl"], "autoapprove": ["mcp__memory__create_entities", "mcp__memory__create_relations", "mcp__memory__add_observations", "mcp__memory__delete_entities", "mcp__memory__delete_observations", "mcp__memory__delete_relations", "mcp__memory__read_graph", "mcp__memory__search_nodes", "mcp__memory__open_nodes"]}' -s user
+**If you didn't use `npm link` (local installation):**
+```bash
+# Replace /full/path/to/mcp-knowledge-graph with your actual project path
+claude mcp add-json memory '{"command": "node", "args": ["/full/path/to/mcp-knowledge-graph/dist/index.js", "--memory-path", "/home/username/.claude/memory.jsonl"], "autoapprove": ["create_entities", "create_relations", "add_observations", "delete_entities", "delete_observations", "delete_relations", "read_graph", "search_nodes", "open_nodes"]}' -s user
 ```
 
 3. **Verify the configuration:**
@@ -249,11 +202,10 @@ memory: node dist/index.js --memory-path /home/username/.claude/memory.jsonl - â
 **Important Configuration Notes:** 
 - Replace `/home/username/.claude/memory.jsonl` with your chosen memory path
 - Replace `/full/path/to/mcp-knowledge-graph` with the actual path where you cloned the repository
-- The `allowedTools` array in `settings.local.json` ensures all memory operations are automatically approved without prompting
-- Tools are prefixed with `mcp__memory__` (e.g., `mcp__memory__create_entities`) - this is the actual tool namespace
-- The `-s user` flag (in future releases) ensures the configuration is available from any directory globally, making the MCP server accessible across all projects. This stores configuration in the global `~/.claude.json` file in your home directory.
+- The `autoapprove` array ensures all memory operations are automatically approved without prompting
+- The `-s user` flag ensures the configuration is available from any directory globally, making the MCP server accessible across all projects
 
-**Why `-s user` scope?** This makes the memory system available from any directory, which enables persistent memory that should work across all your projects and conversations.
+**Why `-s user` scope?** This makes the memory system available from any directory, enabling persistent memory that works across all your projects and conversations.
 
 
 #### Option C: Other AI Platforms
@@ -304,7 +256,35 @@ Follow these steps for each interaction:
 
 For agentic coding partners or other platforms, refer to: **[mcp-knowledge-graph.mdc](./docs/mcp-knowledge-graph.mdc)**
 
-### 5. Test Your Configuration
+### 5. Initialize TELOS Knowledge Graph
+
+Set up your knowledge graph with the comprehensive TELOS taxonomy structure:
+
+```bash
+# Initialize TELOS taxonomy with sample data (uses memory path from MCP configuration)
+npm run setup:taxonomy -- --memory-path /home/username/.claude/memory.jsonl
+
+# Validate the setup (optional)
+npm run validate:taxonomy -- --memory-path /home/username/.claude/memory.jsonl
+```
+
+**Important:** Replace `/home/username/.claude/memory.jsonl` with the same path you configured in your MCP server setup.
+
+**What this does:**
+- Creates 12 sample entities covering all TELOS categories
+- Establishes 15 relationships demonstrating all 7 relationship types
+- Sets up your `memory.jsonl` file with a working knowledge graph
+- Provides examples of Identity, Projects, Habits, Resources, Objectives, etc.
+
+**Expected output:**
+```
+PASS TELOS taxonomy setup completed successfully!
+Memory file created: ./memory.jsonl
+Created 12 entities and 15 relationships
+Your TELOS knowledge graph is ready to use!
+```
+
+### 6. Test Your Configuration
 
 #### Step 1: Verify MCP Server Configuration
 
@@ -330,16 +310,16 @@ claude
 "What do you remember about me?"
 ```
 
-**Expected Response On First Use:**
-The AI should respond with "Remembering..." and begin building your TELOS-structured memory graph.
+**Expected Response:**
+The AI should respond with "Remembering..." and show you the sample TELOS entities you just created, including your default_user identity and the knowledge graph structure.
 
 #### Step 3: Test with Claude Desktop
 1. Restart Claude Desktop
 2. Start a new conversation  
 3. Ask: "What do you remember about me?"
 
-**Expected Response On First Use:**
-The AI should respond with "Remembering..." and begin building your TELOS-structured memory graph.
+**Expected Response:**
+The AI should respond with "Remembering..." and show you the sample TELOS entities you just created.
 
 #### Troubleshooting
 
@@ -349,21 +329,34 @@ The AI should respond with "Remembering..." and begin building your TELOS-struct
 - Ensure you have Node.js 18+ installed
 
 **If Claude CLI shows "No MCP servers configured":**
-- **CRITICAL**: Run the `claude mcp add-json` command from step 1 before testing
+- **CRITICAL**: Run the `claude mcp add-json` command from Option B before testing
 - Verify with `claude mcp list` that the server shows as "âœ“ Connected"
 - Check that the JSON syntax is correct
 - Verify the command and args are valid
 
 **If Claude asks for permission to use tools:**
-- The `autoapprove` array is missing or incorrect
-- Re-add the MCP server with the complete autoapprove configuration
-- Check that all tool names are spelled correctly
+- The `autoapprove` array in your `claude mcp add-json` command is missing or incorrect
+- Re-run the `claude mcp add-json` command with the complete autoapprove configuration
+- Check that all tool names are spelled correctly (without `mcp__memory__` prefix)
 
 **If memory operations fail:**
 - Check file permissions on your memory path
 - Ensure the directory exists and is writable
 - Verify the memory file isn't corrupted
+- Run `npm run validate:taxonomy` to check knowledge graph integrity
 - Test the server directly: `echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "read_graph", "arguments": {}}}' | mcp-knowledge-graph --memory-path /your/path/memory.jsonl`
+
+**If TELOS taxonomy setup fails:**
+- Ensure you've run `npm run build` first
+- **Important:** Use the `--memory-path` parameter to match your MCP server configuration
+- Check that the memory directory is writable
+- Run `npm run validate:taxonomy -- --memory-path /your/path/memory.jsonl` to diagnose issues
+- Delete the memory file and rerun setup with the correct path
+
+**If Claude doesn't see your TELOS data:**
+- Verify the memory paths match between setup script and MCP server configuration
+- Check `claude mcp list` to see the configured memory path
+- Ensure both setup and MCP server use the same `--memory-path`
 
 ---
 
@@ -459,6 +452,49 @@ After complete removal, you can follow the Quick Start instructions from the beg
 
 ---
 
+## TELOS Relationship Taxonomy
+
+**New in v1.0.3+**: This version introduces a comprehensive relationship taxonomy based on the TELOS structure, supporting 7 distinct relationship types across 12 categories for rich semantic knowledge modeling.
+
+### 7 Relationship Types
+
+1. **`supports`** - Forward progress toward goals (default for most connections)
+2. **`enables`** - Provides capability, resources, or tools  
+3. **`constrains`** - Limitations, boundaries, or restrictions
+4. **`mentors`** - Human relationships and guidance (people only)
+5. **`informs`** - Knowledge, context, or information sharing
+6. **`reflects_on`** - Retrospective analysis and learning
+7. **`threatens`** - Risk relationships and potential negative impacts
+
+### 12 TELOS Categories
+
+- **Identity**: Values, mission, principles
+- **Memory**: Past experiences, lessons learned
+- **Resources**: Tools, assets, capabilities
+- **Context**: Environment, situation, constraints
+- **Conventions**: Standards, processes, methodologies
+- **Objectives**: Goals, targets, desired outcomes
+- **Projects**: Active initiatives and implementations
+- **Habits**: Routines, practices, regular behaviors
+- **Risks**: Threats, concerns, potential issues
+- **DecisionJournal**: Choices made and their reasoning
+- **Relationships**: People, teams, stakeholder connections
+- **Retros**: Reflections, reviews, feedback loops
+
+### Enhanced Tools
+
+The new taxonomy adds these relationship query capabilities:
+
+- **`query_relationships_by_type`** - Filter relationships by type
+- **`find_relationship_paths`** - Discover connection paths between entities
+- **`get_relationship_suggestions`** - Get AI-suggested relationship types
+
+All entities now support automatic TELOS category detection and relationship validation.
+
+For complete documentation, see [`docs/relationship-taxonomy.md`](docs/relationship-taxonomy.md).
+
+---
+
 ## Server Name
 
 ```txt
@@ -477,6 +513,7 @@ Entities are the primary nodes in the knowledge graph. Each entity has:
 
 - A unique name (identifier)
 - An entity type (e.g., "person", "organization", "event")
+- A TELOS category (auto-detected or manually specified)
 - A list of observations
 
 Example:
@@ -485,6 +522,7 @@ Example:
 {
   "name": "John_Smith",
   "entityType": "person",
+  "telosCategory": "Relationships",
   "observations": ["Speaks fluent Spanish"]
 }
 ```
@@ -535,8 +573,10 @@ Example:
     - Each object contains:
       - `name` (string): Entity identifier
       - `entityType` (string): Type classification
+      - `telosCategory` (string, optional): TELOS category (auto-detected if not provided)
       - `observations` (string[]): Associated observations
   - Ignores entities with existing names
+  - Automatically detects TELOS categories based on content
 
 - **create_relations**
   - Create multiple new relations between entities
@@ -544,8 +584,10 @@ Example:
     - Each object contains:
       - `from` (string): Source entity name
       - `to` (string): Target entity name
-      - `relationType` (string): Relationship type in active voice
+      - `relationType` (string): Relationship type (validates against TELOS taxonomy)
   - Skips duplicate relations
+  - Validates relationship types against TELOS category matrix
+  - Auto-suggests valid relationship types for invalid combinations
 
 - **add_observations**
   - Add new observations to existing entities
@@ -600,6 +642,29 @@ Example:
     - Requested entities
     - Relations between requested entities
   - Silently skips non-existent nodes
+
+- **query_relationships_by_type**
+  - Query relationships filtered by type
+  - Input: `relationshipType` (string)
+  - Returns: All relationships of the specified type
+  - Supports all 7 TELOS relationship types
+
+- **find_relationship_paths**
+  - Find connection paths between two entities
+  - Input: 
+    - `fromEntity` (string): Starting entity name
+    - `toEntity` (string): Target entity name
+    - `maxDepth` (number, optional): Maximum search depth (default: 3)
+  - Returns: Array of paths with relationship types
+  - Useful for discovering indirect connections
+
+- **get_relationship_suggestions**
+  - Get suggested relationship types between entities
+  - Input:
+    - `fromEntity` (string): Source entity name
+    - `toEntity` (string): Target entity name
+  - Returns: Suggested relationship types based on TELOS categories
+  - Includes category information for both entities
 
 ## Usage with MCP-Compatible Platforms
 

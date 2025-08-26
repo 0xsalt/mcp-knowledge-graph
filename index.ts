@@ -11,6 +11,16 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import minimist from 'minimist';
 import { isAbsolute } from 'path';
+import { 
+  RelationshipType, 
+  TelosCategory, 
+  validateRelationship,
+  getDefaultRelationship,
+  getSuggestedRelationships,
+  detectTelosCategory,
+  isValidRelationshipType,
+  isValidTelosCategory 
+} from './src/types/relationship-schema.js';
 
 // Parse args and handle paths safely
 const argv = minimist(process.argv.slice(2));
@@ -50,6 +60,7 @@ const MEMORY_FILE_PATH = memoryPath || path.join(process.cwd(), 'memory.jsonl');
 interface Entity {
   name: string;
   entityType: string;
+  telosCategory?: TelosCategory;
   observations: string[];
 }
 
@@ -57,6 +68,8 @@ interface Relation {
   from: string;
   to: string;
   relationType: string;
+  fromCategory?: TelosCategory;
+  toCategory?: TelosCategory;
 }
 
 interface KnowledgeGraph {
@@ -95,21 +108,93 @@ class KnowledgeGraphManager {
   async createEntities(entities: Entity[]): Promise<Entity[]> {
     const graph = await this.loadGraph();
     const newEntities = entities.filter(e => !graph.entities.some(existingEntity => existingEntity.name === e.name));
-    graph.entities.push(...newEntities);
+    
+    // Auto-detect TELOS category for new entities if not provided
+    const entitiesWithCategories = newEntities.map(entity => {
+      const telosCategory = entity.telosCategory || detectTelosCategory(entity.name, entity.observations);
+      return {
+        ...entity,
+        telosCategory
+      };
+    });
+    
+    graph.entities.push(...entitiesWithCategories);
     await this.saveGraph(graph);
-    return newEntities;
+    return entitiesWithCategories;
   }
 
   async createRelations(relations: Relation[]): Promise<Relation[]> {
     const graph = await this.loadGraph();
-    const newRelations = relations.filter(r => !graph.relations.some(existingRelation =>
-      existingRelation.from === r.from &&
-      existingRelation.to === r.to &&
-      existingRelation.relationType === r.relationType
-    ));
-    graph.relations.push(...newRelations);
+    const validatedRelations: Relation[] = [];
+    const validationErrors: string[] = [];
+    
+    for (const relation of relations) {
+      // Skip if relation already exists
+      const exists = graph.relations.some(existingRelation =>
+        existingRelation.from === relation.from &&
+        existingRelation.to === relation.to &&
+        existingRelation.relationType === relation.relationType
+      );
+      
+      if (exists) continue;
+      
+      // Find source and target entities to get their categories
+      const fromEntity = graph.entities.find(e => e.name === relation.from);
+      const toEntity = graph.entities.find(e => e.name === relation.to);
+      
+      if (!fromEntity || !toEntity) {
+        validationErrors.push(`Entities not found for relation: ${relation.from} -> ${relation.to}`);
+        continue;
+      }
+      
+      const fromCategory = fromEntity.telosCategory || TelosCategory.CONTEXT;
+      const toCategory = toEntity.telosCategory || TelosCategory.CONTEXT;
+      
+      // Validate relationship type if it's a known type
+      if (isValidRelationshipType(relation.relationType)) {
+        const validation = validateRelationship(fromCategory, toCategory, relation.relationType as RelationshipType);
+        
+        if (!validation.isValid) {
+          const suggestedType = getDefaultRelationship(fromCategory, toCategory);
+          validationErrors.push(`${validation.errorMessage}. Suggested: '${suggestedType}'`);
+          
+          // Auto-correct to suggested type
+          validatedRelations.push({
+            ...relation,
+            relationType: suggestedType,
+            fromCategory,
+            toCategory
+          });
+        } else {
+          validatedRelations.push({
+            ...relation,
+            fromCategory,
+            toCategory
+          });
+        }
+      } else {
+        // Unknown relationship type - suggest default
+        const suggestedType = getDefaultRelationship(fromCategory, toCategory);
+        validationErrors.push(`Unknown relationship type '${relation.relationType}'. Using suggested: '${suggestedType}'`);
+        
+        validatedRelations.push({
+          ...relation,
+          relationType: suggestedType,
+          fromCategory,
+          toCategory
+        });
+      }
+    }
+    
+    graph.relations.push(...validatedRelations);
     await this.saveGraph(graph);
-    return newRelations;
+    
+    // Log validation errors for debugging
+    if (validationErrors.length > 0) {
+      console.error('Relationship validation warnings:', validationErrors);
+    }
+    
+    return validatedRelations;
   }
 
   async addObservations(observations: { entityName: string; contents: string[] }[]): Promise<{ entityName: string; addedObservations: string[] }[]> {
@@ -207,6 +292,68 @@ class KnowledgeGraphManager {
 
     return filteredGraph;
   }
+
+  async queryRelationshipsByType(relationshipType: string): Promise<Relation[]> {
+    const graph = await this.loadGraph();
+    return graph.relations.filter(r => r.relationType === relationshipType);
+  }
+
+  async findRelationshipPaths(fromEntity: string, toEntity: string, maxDepth: number = 3): Promise<{ path: string[]; relationshipTypes: string[] }[]> {
+    const graph = await this.loadGraph();
+    const paths: { path: string[]; relationshipTypes: string[] }[] = [];
+    const visited = new Set<string>();
+    
+    const findPaths = (current: string, target: string, currentPath: string[], currentRelationships: string[], depth: number) => {
+      if (depth > maxDepth) return;
+      if (current === target && currentPath.length > 1) {
+        paths.push({ path: [...currentPath], relationshipTypes: [...currentRelationships] });
+        return;
+      }
+      
+      if (visited.has(current)) return;
+      visited.add(current);
+      
+      // Find all relations from current entity
+      const outgoingRelations = graph.relations.filter(r => r.from === current);
+      
+      for (const relation of outgoingRelations) {
+        findPaths(
+          relation.to,
+          target,
+          [...currentPath, relation.to],
+          [...currentRelationships, relation.relationType],
+          depth + 1
+        );
+      }
+      
+      visited.delete(current);
+    };
+    
+    findPaths(fromEntity, toEntity, [fromEntity], [], 0);
+    return paths;
+  }
+
+  async getRelationshipSuggestions(fromEntity: string, toEntity: string): Promise<{ suggestions: string[]; fromCategory: string; toCategory: string }> {
+    const graph = await this.loadGraph();
+    
+    const fromEntityObj = graph.entities.find(e => e.name === fromEntity);
+    const toEntityObj = graph.entities.find(e => e.name === toEntity);
+    
+    if (!fromEntityObj || !toEntityObj) {
+      throw new Error(`One or both entities not found: ${fromEntity}, ${toEntity}`);
+    }
+    
+    const fromCategory = fromEntityObj.telosCategory || TelosCategory.CONTEXT;
+    const toCategory = toEntityObj.telosCategory || TelosCategory.CONTEXT;
+    
+    const suggestions = getSuggestedRelationships(fromCategory, toCategory);
+    
+    return {
+      suggestions: suggestions.map(s => s.toString()),
+      fromCategory: fromCategory.toString(),
+      toCategory: toCategory.toString()
+    };
+  }
 }
 
 const knowledgeGraphManager = new KnowledgeGraphManager();
@@ -238,6 +385,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                 properties: {
                   name: { type: "string", description: "The name of the entity" },
                   entityType: { type: "string", description: "The type of the entity" },
+                  telosCategory: { 
+                    type: "string", 
+                    description: "Optional TELOS category (Identity, Memory, Resources, Context, Conventions, Objectives, Projects, Habits, Risks, DecisionJournal, Relationships, Retros). Will be auto-detected if not provided.",
+                    enum: ["Identity", "Memory", "Resources", "Context", "Conventions", "Objectives", "Projects", "Habits", "Risks", "DecisionJournal", "Relationships", "Retros"]
+                  },
                   observations: {
                     type: "array",
                     items: { type: "string" },
@@ -395,6 +547,61 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: ["names"],
         },
       },
+      {
+        name: "query_relationships_by_type",
+        description: "Query relationships by their type (supports, enables, constrains, etc.)",
+        inputSchema: {
+          type: "object",
+          properties: {
+            relationshipType: {
+              type: "string",
+              description: "The relationship type to filter by (supports, enables, constrains, mentors, informs, reflects_on, threatens)"
+            },
+          },
+          required: ["relationshipType"],
+        },
+      },
+      {
+        name: "find_relationship_paths",
+        description: "Find relationship paths between two entities with specified maximum depth",
+        inputSchema: {
+          type: "object",
+          properties: {
+            fromEntity: {
+              type: "string",
+              description: "The name of the starting entity"
+            },
+            toEntity: {
+              type: "string",
+              description: "The name of the target entity"
+            },
+            maxDepth: {
+              type: "number",
+              description: "Maximum depth to search (default: 3)",
+              default: 3
+            },
+          },
+          required: ["fromEntity", "toEntity"],
+        },
+      },
+      {
+        name: "get_relationship_suggestions",
+        description: "Get suggested relationship types between two entities based on their TELOS categories",
+        inputSchema: {
+          type: "object",
+          properties: {
+            fromEntity: {
+              type: "string",
+              description: "The name of the source entity"
+            },
+            toEntity: {
+              type: "string",
+              description: "The name of the target entity"
+            },
+          },
+          required: ["fromEntity", "toEntity"],
+        },
+      },
     ],
   };
 });
@@ -428,6 +635,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       return { content: [{ type: "text", text: JSON.stringify(await knowledgeGraphManager.searchNodes(args.query as string), null, 2) }] };
     case "open_nodes":
       return { content: [{ type: "text", text: JSON.stringify(await knowledgeGraphManager.openNodes(args.names as string[]), null, 2) }] };
+    case "query_relationships_by_type":
+      return { content: [{ type: "text", text: JSON.stringify(await knowledgeGraphManager.queryRelationshipsByType(args.relationshipType as string), null, 2) }] };
+    case "find_relationship_paths":
+      return { content: [{ type: "text", text: JSON.stringify(await knowledgeGraphManager.findRelationshipPaths(args.fromEntity as string, args.toEntity as string, args.maxDepth as number || 3), null, 2) }] };
+    case "get_relationship_suggestions":
+      return { content: [{ type: "text", text: JSON.stringify(await knowledgeGraphManager.getRelationshipSuggestions(args.fromEntity as string, args.toEntity as string), null, 2) }] };
     default:
       throw new Error(`Unknown tool: ${name}`);
   }

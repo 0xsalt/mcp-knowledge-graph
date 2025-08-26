@@ -1,0 +1,87 @@
+{
+  "testEntities": [
+    {
+      "name": "test_user",
+      "entityType": "Identity",
+      "telosCategory": "Identity",
+      "observations": ["Test user for validation", "Focused on productivity optimization"]
+    },
+    {
+      "name": "test_project",
+      "entityType": "Projects",
+      "telosCategory": "Projects",
+      "observations": ["Example project for testing", "Demonstrates project management"]
+    },
+    {
+      "name": "test_habit",
+      "entityType": "Habits",
+      "telosCategory": "Habits",
+      "observations": ["Daily testing routine", "Ensures code quality"]
+    },
+    {
+      "name": "test_resource",
+      "entityType": "Resources",
+      "telosCategory": "Resources",
+      "observations": ["Testing framework", "Enables automated validation"]
+    },
+    {
+      "name": "test_risk",
+      "entityType": "Risks",
+      "telosCategory": "Risks",
+      "observations": ["Risk of test failures", "Could impact deployment"]
+    }
+  ],
+  "testRelationships": [
+    {
+      "from": "test_habit",
+      "to": "test_project",
+      "relationType": "supports"
+    },
+    {
+      "from": "test_resource",
+      "to": "test_project",
+      "relationType": "enables"
+    },
+    {
+      "from": "test_risk",
+      "to": "test_project",
+      "relationType": "threatens"
+    }
+  ],
+  "invalidRelationships": [
+    {
+      "from": "test_habit",
+      "to": "test_project",
+      "relationType": "threatens",
+      "expectedError": "threatens should only be used by Risks category"
+    },
+    {
+      "from": "test_project",
+      "to": "test_user",
+      "relationType": "mentors",
+      "expectedError": "mentors should only be used by Relationships category"
+    }
+  ],
+  "categoryDetectionTests": [
+    {
+      "name": "daily_standup",
+      "observations": ["routine meeting", "daily practice", "regular team sync"],
+      "expectedCategory": "Habits"
+    },
+    {
+      "name": "product_launch_goal",
+      "observations": ["target Q4 2024", "achieve 10k users", "outcome focused"],
+      "expectedCategory": "Objectives"  
+    },
+    {
+      "name": "budget_shortage",
+      "observations": ["threat to project", "risk of delays", "concern for timeline"],
+      "expectedCategory": "Risks"
+    },
+    {
+      "name": "development_tools",
+      "observations": ["infrastructure setup", "tool configuration", "capability enhancement"],
+      "expectedCategory": "Resources"
+    }
+  ]
+}
