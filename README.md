@@ -206,6 +206,28 @@ memory: node dist/index.js --memory-path /home/username/.claude/memory.jsonl - â
 - The `autoapprove` array ensures all memory operations are automatically approved without prompting
 - The `-s user` flag ensures the configuration is available from any directory globally, making the MCP server accessible across all projects
 
+**Additional Claude Code Configuration:**
+Add the following to your Claude Code `~/.claude/settings.json` to auto-approve memory operations and avoid permission prompts:
+
+```json
+"permissions": {
+  "allow": [
+    "mcp__memory__read_graph",
+    "mcp__memory__add_observations", 
+    "mcp__memory__create_entities",
+    "mcp__memory__create_relations",
+    "mcp__memory__delete_entities",
+    "mcp__memory__delete_observations",
+    "mcp__memory__delete_relations",
+    "mcp__memory__search_nodes",
+    "mcp__memory__open_nodes",
+    "mcp__memory__query_relationships_by_type",
+    "mcp__memory__find_relationship_paths",
+    "mcp__memory__get_relationship_suggestions"
+  ]
+}
+```
+
 **Why `-s user` scope?** This makes the memory system available from any directory, enabling persistent memory that works across all your projects and conversations.
 
 

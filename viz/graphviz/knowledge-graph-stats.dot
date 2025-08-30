@@ -1,0 +1,21 @@
+digraph Comparison {
+    compound=true;
+    rankdir=TB;
+    
+    subgraph cluster_stats {
+        label="Knowledge Graph Statistics";
+        style=filled;
+        bgcolor=lightblue;
+        
+        stats [shape=none, label=<
+            <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" BGCOLOR="white">
+                <TR><TD COLSPAN="2"><B>Graph Metrics</B></TD></TR>
+                <TR><TD>Total Entities</TD><TD>13</TD></TR>
+                <TR><TD>Total Relations</TD><TD>15</TD></TR>
+                <TR><TD>TELOS Categories</TD><TD>12</TD></TR>
+                <TR><TD>Relation Types</TD><TD>7</TD></TR>
+                <TR><TD>Avg Connections/Node</TD><TD>2.3</TD></TR>
+            </TABLE>
+        >];
+    }
+}

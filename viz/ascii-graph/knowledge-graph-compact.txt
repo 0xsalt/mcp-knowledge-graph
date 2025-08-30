@@ -1,0 +1,39 @@
+════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+                                           MCP KNOWLEDGE GRAPH - COMPACT LIST                                           
+════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+├─┤ CONSTRAINS (2)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  [C] remote_work_context → [P] knowledge_graph_implementation
+  [V] tdd_development_convention → [H] daily_reflection_habit
+
+╞═→ ENABLES (2)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  [R] claude_mcp_integration → [P] knowledge_graph_implementation
+  [C] remote_work_context → [O] productivity_optimization_goal
+
+├··→ INFORMS (2)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  [M] ai_knowledge_systems_learning → [D] taxonomy_design_decision
+  [C] remote_work_context → [O] productivity_optimization_goal
+
+├◆→ MENTORS (2)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  [~] development_team_relationship → [P] knowledge_graph_implementation
+  [~] development_team_relationship → [O] productivity_optimization_goal
+
+├~→ REFLECTS_ON (2)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  [↺] weekly_project_retrospective → [P] knowledge_graph_implementation
+  [D] taxonomy_design_decision → [H] daily_reflection_habit
+
+├─→ SUPPORTS (3)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  [H] daily_reflection_habit → [P] knowledge_graph_implementation
+  [P] knowledge_graph_implementation → [O] productivity_optimization_goal
+  [V] tdd_development_convention → [P] knowledge_graph_implementation
+
+├××→ THREATENS (2)
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  [!] scope_creep_risk → [P] knowledge_graph_implementation
+  [!] scope_creep_risk → [O] productivity_optimization_goal

@@ -1,0 +1,350 @@
+digraph KnowledgeGraph {
+    rankdir=TB;
+    node [fontname="Arial", fontsize=10, style=filled];
+    edge [fontname="Arial", fontsize=8];
+    
+    // Graph properties
+    graph [
+        label="MCP Knowledge Graph\nTELOS Categories & Relationships",
+        labelloc=t,
+        fontsize=14,
+        fontname="Arial Bold",
+        splines=true,
+        overlap=false
+    ];
+
+    // Identity Category
+    subgraph cluster_0 {
+        label="Identity";
+        style=rounded;
+        bgcolor="red20";
+        fontcolor="red";
+        
+        default_user [
+            label="default_user",
+            fillcolor="red",
+            fontcolor=white,
+            tooltip="default_user\nType: Identity\nCategory: Identity"
+        ];
+    }
+
+    // Projects Category
+    subgraph cluster_1 {
+        label="Projects";
+        style=rounded;
+        bgcolor="teal20";
+        fontcolor="teal";
+        
+        knowledge_graph_implementation [
+            label="knowledge_graph_i...",
+            fillcolor="teal",
+            fontcolor=white,
+            tooltip="knowledge_graph_implementation\nType: Projects\nCategory: Projects"
+        ];
+        Ubuntu_MATE_Setup [
+            label="Ubuntu MATE Setup",
+            fillcolor="teal",
+            fontcolor=white,
+            tooltip="Ubuntu MATE Setup\nType: Project\nCategory: Projects"
+        ];
+    }
+
+    // Habits Category
+    subgraph cluster_2 {
+        label="Habits";
+        style=rounded;
+        bgcolor="darkslategray20";
+        fontcolor="darkslategray";
+        
+        daily_reflection_habit [
+            label="daily_reflection_...",
+            fillcolor="darkslategray",
+            fontcolor=white,
+            tooltip="daily_reflection_habit\nType: Habits\nCategory: Habits"
+        ];
+    }
+
+    // Resources Category
+    subgraph cluster_3 {
+        label="Resources";
+        style=rounded;
+        bgcolor="green20";
+        fontcolor="green";
+        
+        claude_mcp_integration [
+            label="claude_mcp_integr...",
+            fillcolor="green",
+            fontcolor=white,
+            tooltip="claude_mcp_integration\nType: Resources\nCategory: Resources"
+        ];
+    }
+
+    // Objectives Category
+    subgraph cluster_4 {
+        label="Objectives";
+        style=rounded;
+        bgcolor="darkorange20";
+        fontcolor="darkorange";
+        
+        productivity_optimization_goal [
+            label="productivity_opti...",
+            fillcolor="darkorange",
+            fontcolor=white,
+            tooltip="productivity_optimization_goal\nType: Objectives\nCategory: Objectives"
+        ];
+    }
+
+    // Context Category
+    subgraph cluster_5 {
+        label="Context";
+        style=rounded;
+        bgcolor="orange20";
+        fontcolor="orange";
+        
+        remote_work_context [
+            label="remote_work_context",
+            fillcolor="orange",
+            fontcolor=white,
+            tooltip="remote_work_context\nType: Context\nCategory: Context"
+        ];
+    }
+
+    // Conventions Category
+    subgraph cluster_6 {
+        label="Conventions";
+        style=rounded;
+        bgcolor="purple20";
+        fontcolor="purple";
+        
+        tdd_development_convention [
+            label="tdd_development_c...",
+            fillcolor="purple",
+            fontcolor=white,
+            tooltip="tdd_development_convention\nType: Conventions\nCategory: Conventions"
+        ];
+    }
+
+    // Memory Category
+    subgraph cluster_7 {
+        label="Memory";
+        style=rounded;
+        bgcolor="blue20";
+        fontcolor="blue";
+        
+        ai_knowledge_systems_learning [
+            label="ai_knowledge_syst...",
+            fillcolor="blue",
+            fontcolor=white,
+            tooltip="ai_knowledge_systems_learning\nType: Memory\nCategory: Memory"
+        ];
+    }
+
+    // Risks Category
+    subgraph cluster_8 {
+        label="Risks";
+        style=rounded;
+        bgcolor="darkred20";
+        fontcolor="darkred";
+        
+        scope_creep_risk [
+            label="scope_creep_risk",
+            fillcolor="darkred",
+            fontcolor=white,
+            tooltip="scope_creep_risk\nType: Risks\nCategory: Risks"
+        ];
+    }
+
+    // DecisionJournal Category
+    subgraph cluster_9 {
+        label="DecisionJournal";
+        style=rounded;
+        bgcolor="indigo20";
+        fontcolor="indigo";
+        
+        taxonomy_design_decision [
+            label="taxonomy_design_d...",
+            fillcolor="indigo",
+            fontcolor=white,
+            tooltip="taxonomy_design_decision\nType: DecisionJournal\nCategory: DecisionJournal"
+        ];
+    }
+
+    // Relationships Category
+    subgraph cluster_10 {
+        label="Relationships";
+        style=rounded;
+        bgcolor="darkcyan20";
+        fontcolor="darkcyan";
+        
+        development_team_relationship [
+            label="development_team_...",
+            fillcolor="darkcyan",
+            fontcolor=white,
+            tooltip="development_team_relationship\nType: Relationships\nCategory: Relationships"
+        ];
+    }
+
+    // Retros Category
+    subgraph cluster_11 {
+        label="Retros";
+        style=rounded;
+        bgcolor="darkgreen20";
+        fontcolor="darkgreen";
+        
+        weekly_project_retrospective [
+            label="weekly_project_re...",
+            fillcolor="darkgreen",
+            fontcolor=white,
+            tooltip="weekly_project_retrospective\nType: Retros\nCategory: Retros"
+        ];
+    }
+
+    // Relationships
+    daily_reflection_habit -> knowledge_graph_implementation [
+        label="supports",
+        color="green",
+        style="solid",
+        arrowhead="normal",
+        tooltip="daily_reflection_habit supports knowledge_graph_implementation"
+    ];
+    knowledge_graph_implementation -> productivity_optimization_goal [
+        label="supports",
+        color="green",
+        style="solid",
+        arrowhead="normal",
+        tooltip="knowledge_graph_implementation supports productivity_optimization_goal"
+    ];
+    tdd_development_convention -> knowledge_graph_implementation [
+        label="supports",
+        color="green",
+        style="solid",
+        arrowhead="normal",
+        tooltip="tdd_development_convention supports knowledge_graph_implementation"
+    ];
+    claude_mcp_integration -> knowledge_graph_implementation [
+        label="enables",
+        color="blue",
+        style="solid",
+        arrowhead="normal",
+        tooltip="claude_mcp_integration enables knowledge_graph_implementation"
+    ];
+    remote_work_context -> productivity_optimization_goal [
+        label="enables",
+        color="blue",
+        style="solid",
+        arrowhead="normal",
+        tooltip="remote_work_context enables productivity_optimization_goal"
+    ];
+    remote_work_context -> knowledge_graph_implementation [
+        label="constrains",
+        color="red",
+        style="dashed",
+        arrowhead="normal",
+        tooltip="remote_work_context constrains knowledge_graph_implementation"
+    ];
+    tdd_development_convention -> daily_reflection_habit [
+        label="constrains",
+        color="red",
+        style="dashed",
+        arrowhead="normal",
+        tooltip="tdd_development_convention constrains daily_reflection_habit"
+    ];
+    development_team_relationship -> knowledge_graph_implementation [
+        label="mentors",
+        color="purple",
+        style="solid",
+        arrowhead="diamond",
+        tooltip="development_team_relationship mentors knowledge_graph_implementation"
+    ];
+    development_team_relationship -> productivity_optimization_goal [
+        label="mentors",
+        color="purple",
+        style="solid",
+        arrowhead="diamond",
+        tooltip="development_team_relationship mentors productivity_optimization_goal"
+    ];
+    ai_knowledge_systems_learning -> taxonomy_design_decision [
+        label="informs",
+        color="orange",
+        style="dotted",
+        arrowhead="normal",
+        tooltip="ai_knowledge_systems_learning informs taxonomy_design_decision"
+    ];
+    remote_work_context -> productivity_optimization_goal [
+        label="informs",
+        color="orange",
+        style="dotted",
+        arrowhead="normal",
+        tooltip="remote_work_context informs productivity_optimization_goal"
+    ];
+    weekly_project_retrospective -> knowledge_graph_implementation [
+        label="reflects_on",
+        color="teal",
+        style="solid",
+        arrowhead="vee",
+        tooltip="weekly_project_retrospective reflects_on knowledge_graph_implementation"
+    ];
+    taxonomy_design_decision -> daily_reflection_habit [
+        label="reflects_on",
+        color="teal",
+        style="solid",
+        arrowhead="vee",
+        tooltip="taxonomy_design_decision reflects_on daily_reflection_habit"
+    ];
+    scope_creep_risk -> knowledge_graph_implementation [
+        label="threatens",
+        color="darkred",
+        style="bold",
+        arrowhead="tee",
+        tooltip="scope_creep_risk threatens knowledge_graph_implementation"
+    ];
+    scope_creep_risk -> productivity_optimization_goal [
+        label="threatens",
+        color="darkred",
+        style="bold",
+        arrowhead="tee",
+        tooltip="scope_creep_risk threatens productivity_optimization_goal"
+    ];
+
+    // Legend
+    subgraph cluster_legend {
+        label="Legend";
+        style=rounded;
+        bgcolor=lightyellow;
+        rank=sink;
+        
+        // Category legend
+        legend_categories [shape=none, label=<
+            <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" BGCOLOR="white">
+                <TR><TD COLSPAN="2"><B>TELOS Categories</B></TD></TR>
+                <TR><TD BGCOLOR="red">   </TD><TD ALIGN="LEFT">Identity</TD></TR>
+                <TR><TD BGCOLOR="teal">   </TD><TD ALIGN="LEFT">Projects</TD></TR>
+                <TR><TD BGCOLOR="darkslategray">   </TD><TD ALIGN="LEFT">Habits</TD></TR>
+                <TR><TD BGCOLOR="green">   </TD><TD ALIGN="LEFT">Resources</TD></TR>
+                <TR><TD BGCOLOR="darkorange">   </TD><TD ALIGN="LEFT">Objectives</TD></TR>
+                <TR><TD BGCOLOR="orange">   </TD><TD ALIGN="LEFT">Context</TD></TR>
+                <TR><TD BGCOLOR="purple">   </TD><TD ALIGN="LEFT">Conventions</TD></TR>
+                <TR><TD BGCOLOR="blue">   </TD><TD ALIGN="LEFT">Memory</TD></TR>
+                <TR><TD BGCOLOR="darkred">   </TD><TD ALIGN="LEFT">Risks</TD></TR>
+                <TR><TD BGCOLOR="indigo">   </TD><TD ALIGN="LEFT">DecisionJournal</TD></TR>
+                <TR><TD BGCOLOR="darkcyan">   </TD><TD ALIGN="LEFT">Relationships</TD></TR>
+                <TR><TD BGCOLOR="darkgreen">   </TD><TD ALIGN="LEFT">Retros</TD></TR>
+            </TABLE>
+        >];
+        
+        // Relationship legend  
+        legend_relations [shape=none, label=<
+            <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" BGCOLOR="white">
+                <TR><TD COLSPAN="2"><B>Relationships</B></TD></TR>
+                <TR><TD><FONT COLOR="green">━━━</FONT></TD><TD ALIGN="LEFT">supports</TD></TR>
+                <TR><TD><FONT COLOR="blue">━━━</FONT></TD><TD ALIGN="LEFT">enables</TD></TR>
+                <TR><TD><FONT COLOR="red">━━━</FONT></TD><TD ALIGN="LEFT">constrains</TD></TR>
+                <TR><TD><FONT COLOR="purple">━━━</FONT></TD><TD ALIGN="LEFT">mentors</TD></TR>
+                <TR><TD><FONT COLOR="orange">━━━</FONT></TD><TD ALIGN="LEFT">informs</TD></TR>
+                <TR><TD><FONT COLOR="teal">━━━</FONT></TD><TD ALIGN="LEFT">reflects_on</TD></TR>
+                <TR><TD><FONT COLOR="darkred">━━━</FONT></TD><TD ALIGN="LEFT">threatens</TD></TR>
+            </TABLE>
+        >];
+    }
+    
+}

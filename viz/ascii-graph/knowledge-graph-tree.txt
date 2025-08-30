@@ -1,0 +1,93 @@
+════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+                                            MCP KNOWLEDGE GRAPH - TREE VIEW                                             
+════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+GRAPH STATISTICS:
+  Total Entities: 13
+  Total Relations: 15
+  TELOS Categories: 12
+  Relationship Types: 7
+  Avg Connections per Node: 2.3
+
+[C] CONTEXT
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+└── remote_work_context
+    ╞═→ productivity_optimization_goal
+    ├─┤ knowledge_graph_implementation
+    ├··→ productivity_optimization_goal
+
+[V] CONVENTIONS
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+└── tdd_development_convention
+    ├─→ knowledge_graph_implementation
+    ├─┤ daily_reflection_habit
+
+[D] DECISIONJOURNAL
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+└── taxonomy_design_decision
+    ├~→ daily_reflection_habit
+    ┌── INCOMING:
+    ← ├··→ ai_knowledge_systems_learning
+
+[H] HABITS
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+└── daily_reflection_habit
+    ├─→ knowledge_graph_implementation
+    ┌── INCOMING:
+    ← ├─┤ tdd_development_convention
+    ← ├~→ taxonomy_design_decision
+
+[I] IDENTITY
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+└── default_user
+
+[M] MEMORY
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+└── ai_knowledge_systems_learning
+    ├··→ taxonomy_design_decision
+
+[O] OBJECTIVES
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+└── productivity_optimization_goal
+    ← ├─→ knowledge_graph_implementation
+    ← ╞═→ remote_work_context
+    ← ├◆→ development_team_relationship
+    ← ├··→ remote_work_context
+    ← ├××→ scope_creep_risk
+
+[P] PROJECTS
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+├── knowledge_graph_implementation
+│   ├─→ productivity_optimization_goal
+│   ┌── INCOMING:
+│   ← ├─→ daily_reflection_habit
+│   ← ├─→ tdd_development_convention
+│   ← ╞═→ claude_mcp_integration
+│   ← ├─┤ remote_work_context
+│   ← ├◆→ development_team_relationship
+│   ← ├~→ weekly_project_retrospective
+│   ← ├××→ scope_creep_risk
+│
+└── Ubuntu MATE Setup
+
+[~] RELATIONSHIPS
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+└── development_team_relationship
+    ├◆→ knowledge_graph_implementation
+    ├◆→ productivity_optimization_goal
+
+[R] RESOURCES
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+└── claude_mcp_integration
+    ╞═→ knowledge_graph_implementation
+
+[↺] RETROS
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+└── weekly_project_retrospective
+    ├~→ knowledge_graph_implementation
+
+[!] RISKS
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+└── scope_creep_risk
+    ├××→ knowledge_graph_implementation
+    ├××→ productivity_optimization_goal
