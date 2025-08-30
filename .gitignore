@@ -1,4 +1,5 @@
 # Custom
+viz/
 .claude*
 docs/agent-codebase-documentation/
 docs/code-documentation/
