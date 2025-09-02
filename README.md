@@ -235,7 +235,14 @@ Add the following to your Claude Code `~/.claude/settings.json` to auto-approve 
 
 For other MCP-compatible platforms (Cursor, VS Code with MCP extensions, etc.), refer to their specific MCP configuration documentation. The server configuration remains the same - just adapt the config format to your platform.
 
-### 5. Add Memory Instructions to Your AI
+### 5. Configure Adaptive Memory Management
+
+For optimal memory usage across different project types, see the **[Adaptive Memory Management Guide](./docs/adaptive-memory-guide.md)** which provides:
+- Universal memory categories that adapt to any project context
+- Entity addition criteria to prevent information overload
+- Integration instructions for project-specific customization
+
+### 6. Add Memory Instructions to Your AI
 
 #### For Claude Projects
 
@@ -279,7 +286,7 @@ Follow these steps for each interaction:
 
 For agentic coding partners or other platforms, refer to: **[mcp-knowledge-graph.mdc](./docs/mcp-knowledge-graph.mdc)**
 
-### 5. Initialize TELOS Knowledge Graph
+### 7. Initialize TELOS Knowledge Graph
 
 Set up your knowledge graph with the comprehensive TELOS taxonomy structure:
 
@@ -307,7 +314,7 @@ Created 12 entities and 15 relationships
 Your TELOS knowledge graph is ready to use!
 ```
 
-### 6. Test Your Configuration
+### 8. Test Your Configuration
 
 #### Step 1: Verify MCP Server Configuration
 

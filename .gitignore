@@ -1,4 +1,5 @@
 # Custom
+memory.jsonl
 viz/
 .claude*
 docs/agent-codebase-documentation/
