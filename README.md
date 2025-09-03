@@ -4,6 +4,33 @@
 
 An improved implementation of persistent memory using a local knowledge graph with a customizable `--memory-path`.
 
+## Machine Install Instructions For Claude Code Kilocode, Cursor, Gemini, Codex, and others.
+
+Quick machine-readable installation sequence for automated setup:
+
+```bash
+# Copy custom implementation
+cp -r ~/local/dev/0xsalt/repos/mcp-knowledge-graph .
+cd mcp-knowledge-graph/
+
+# Build and install
+npm install
+npm run build
+node dist/index.js --help
+
+# Make globally available
+npm link
+mcp-knowledge-graph --help
+
+# Configure Claude Code MCP
+claude mcp add-json memory '{"command": "mcp-knowledge-graph", "args": ["--memory-path", "/home/username/.claude/memory.jsonl"], "autoapprove": ["create_entities", "create_relations", "add_observations", "delete_entities", "delete_observations", "delete_relations", "read_graph", "search_nodes", "open_nodes"]}' -s user
+
+# Verify connection
+claude mcp list
+```
+
+**Expected result:** MCP server shows as "✓ Connected" using global memory path `/home/username/.claude/memory.jsonl`
+
 Works with any AI model or client that supports the Model Context Protocol (MCP) or function-calling interfaces. Use a stable path so memory survives restarts and npx cache wipes.
 
 > [!NOTE]
